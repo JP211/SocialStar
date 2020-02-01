@@ -25,6 +25,9 @@ exports.getShoutouts = functions.https.onRequest((req, res) => {
 
 // To create a new shoutout and push to firebase
 exports.createShoutout = functions.https.onRequest((req, res) => {
+  if(req.method !== 'POST') {
+    return res.status(400).json({ error: 'Method not allowed.'});
+  }
   const newShoutout = {
       body: req.body.body,
       userHandle: req.body.userHandle,
@@ -39,5 +42,6 @@ exports.createShoutout = functions.https.onRequest((req, res) => {
     })
     .catch(err => {
       res.status(500).json({ error: 'Something went wrong.'});
+      console.error(err);
     })
 });
